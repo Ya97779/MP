@@ -36,8 +36,9 @@ namespace MissionPlanner
 {
     public static class Program
     {
+        // 日志记录器实例
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
-
+        // 程序启动时间戳
         public static DateTime starttime = DateTime.Now;
 
         public static string name { get; internal set; }
@@ -143,7 +144,7 @@ namespace MissionPlanner
             Console.WriteLine("PlacesDesktop Dir " +  Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             Console.WriteLine("PlacesPersonal Dir " +  Environment.GetFolderPath(Environment.SpecialFolder.Personal));
             Console.WriteLine("PlacesMyComputer Dir " + Environment.GetFolderPath(Environment.SpecialFolder.MyComputer));
-
+            
             var t = Type.GetType("Mono.Runtime");
             MONO = (t != null);
 
@@ -199,8 +200,8 @@ namespace MissionPlanner
                 Utilities.Update.DoUpdate();
                 return;
             }
-
-            name = "Mission Planner";
+            //修改启动界面名字
+            name = "Gplanner";
 
             try
             {
@@ -214,6 +215,8 @@ namespace MissionPlanner
             catch
             {
             }
+            /* 品牌定制化配置 */
+            // 加载自定义Logo和图标文件
 
             if (File.Exists(Settings.GetRunningDirectory() + "logo.png"))
                 Logo = new Bitmap(Settings.GetRunningDirectory() + "logo.png");
@@ -262,7 +265,8 @@ namespace MissionPlanner
             {
                 log.Error(ex);
             }
-
+            /* 启动画面配置 */
+            // 创建并显示启动画面
             Splash = new MissionPlanner.Splash();
             if (SplashBG != null)
             {
@@ -279,6 +283,7 @@ namespace MissionPlanner
                 : System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Splash.Text = name + " " + Application.ProductVersion + " build " + strVersion;
             Console.WriteLine("Splash.Show()");
+            //显示启动画面
             Splash.Show();
 
             Console.WriteLine("Debugger.IsAttached " + Debugger.IsAttached);
@@ -297,6 +302,8 @@ namespace MissionPlanner
             };
 
             // setup theme provider
+            /* 主题管理系统 */
+            // 注册主题应用到各个UI组件的事件
             MsgBox.CustomMessageBox.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             Controls.MainSwitcher.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             MissionPlanner.Controls.InputBox.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
@@ -306,6 +313,7 @@ namespace MissionPlanner
             Controls.BackstageView.BackstageView.Tracking += MissionPlanner.Utilities.Tracking.AddPage;
 
             // setup settings provider
+            //通信模块配置
             MissionPlanner.Comms.CommsBase.Settings += CommsBase_Settings;
             MissionPlanner.Comms.CommsBase.InputBoxShow += CommsBaseOnInputBoxShow;
             MissionPlanner.Comms.CommsBase.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
@@ -315,6 +323,8 @@ namespace MissionPlanner
 
             Console.WriteLine("Setup GMaps 1");
             // set the cache provider to my custom version
+            /* 地图系统配置 */
+            // 初始化地图缓存和提供商
             GMap.NET.GMaps.Instance.PrimaryCache = new Maps.MyImageCache();
             if (Settings.Instance["mapCache"] != null)
             {
@@ -323,6 +333,7 @@ namespace MissionPlanner
             }
             Console.WriteLine("Setup GMaps 2");
             // add my custom map providers
+            // 添加多个自定义地图提供商（WMS、WMTS、MapBox等）
             GMap.NET.MapProviders.GMapProviders.List.Add(Maps.WMSProvider.Instance);
             GMap.NET.MapProviders.GMapProviders.List.Add(Maps.WMTSProvider.Instance);
             GMap.NET.MapProviders.GMapProviders.List.Add(Maps.Custom.Instance);
@@ -460,9 +471,10 @@ namespace MissionPlanner
                     }
                 }
             }
-
+            /* 主程序启动 */
             try
             {
+                // 启动主窗体
                 Thread.CurrentThread.Name = "Base Thread";
                 Console.WriteLine("Application.Run(new MainV2())");
                 Application.Run(new MainV2());

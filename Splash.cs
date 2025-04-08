@@ -20,7 +20,7 @@ namespace MissionPlanner
             {
                 pictureBox1.BackgroundImage = MissionPlanner.Properties.Resources.bgdark;
                 pictureBox1.Image = Program.Logo;
-                pictureBox1.Visible = true;
+                pictureBox1.Visible = false;
             }
 
             Console.WriteLine("Splash .ctor");

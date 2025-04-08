@@ -59,6 +59,7 @@ namespace MissionPlanner
 
         public abstract class menuicons
         {
+            //引用各种标志图片
             public abstract Image fd { get; }
             public abstract Image fp { get; }
             public abstract Image initsetup { get; }
@@ -74,8 +75,22 @@ namespace MissionPlanner
         }
 
 
+        /// <summary>
+        /// 黑色主题菜单图标集合
+        /// 提供Burnt Kermit主题的菜单图标实现
+        /// </summary>
+        /// <remarks>
+        /// 继承自menuicons基类，实现自定义图标加载逻辑。优先从运行目录加载light主题图标文件，
+        /// 若本地文件不存在则使用内嵌资源作为备用方案
+        /// </remarks>
         public class burntkermitmenuicons : menuicons
         {
+            /// <summary>
+            /// 获取飞行数据界面图标
+            /// </summary>
+            /// <returns>
+            /// 当运行目录存在light_flightdata_icon.png时返回该图片，
+            /// 否则返回内嵌的light_flightdata_icon资源
             public override Image fd
             {
                 get
@@ -87,8 +102,10 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取飞行计划界面图标
             public override Image fp
             {
+               
                 get
                 {
                     if (File.Exists($"{running_directory}light_flightplan_icon.png"))
@@ -98,8 +115,10 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取初始设置界面图标
             public override Image initsetup
             {
+                
                 get
                 {
                     if (File.Exists($"{running_directory}light_initialsetup_icon.png"))
@@ -109,6 +128,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取配置调参界面图标
             public override Image config_tuning
             {
                 get
@@ -120,6 +140,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取模拟器界面图标
             public override Image sim
             {
                 get
@@ -131,6 +152,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取终端界面图标
             public override Image terminal
             {
                 get
@@ -141,7 +163,8 @@ namespace MissionPlanner
                         return global::MissionPlanner.Properties.Resources.light_terminal_icon;
                 }
             }
-
+            
+            // 获取帮助功能图标
             public override Image help
             {
                 get
@@ -153,6 +176,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取捐赠功能图标
             public override Image donate
             {
                 get
@@ -164,6 +188,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取连接设备图标
             public override Image connect
             {
                 get
@@ -175,6 +200,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取断开连接图标
             public override Image disconnect
             {
                 get
@@ -186,6 +212,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取图标背景图
             public override Image bg
             {
                 get
@@ -197,6 +224,7 @@ namespace MissionPlanner
                 }
             }
 
+            // 获取向导功能图标
             public override Image wizard
             {
                 get
@@ -209,6 +237,7 @@ namespace MissionPlanner
             }
         }
 
+        // 白色高对比度主题菜单图标集合
         public class highcontrastmenuicons : menuicons
         {
             private string running_directory = Settings.GetRunningDirectory();
@@ -347,7 +376,10 @@ namespace MissionPlanner
         }
 
         Controls.MainSwitcher MyView;
-
+        /* 显示配置静态字段（延迟初始化）
+           检测自定义配置文件是否存在：
+   -       存在时加载自定义视图配置
+   -       不存在时加载高级默认配置 */
         private static DisplayView _displayConfiguration = File.Exists(DisplayViewExtensions.custompath)
             ? new DisplayView().Custom()
             : new DisplayView().Advanced();
@@ -439,7 +471,7 @@ namespace MissionPlanner
         /// Comport name
         /// </summary>
         public static string comPortName = "";
-
+        // 默认使用57600标准速率
         public static int comPortBaud = 57600;
 
         /// <summary>
@@ -454,7 +486,7 @@ namespace MissionPlanner
 
 
         /// <summary>
-        /// speech engine enable
+        /// speech engine enable   语音功能全局开关属性
         /// </summary>
         public static bool speechEnable
         {
@@ -551,7 +583,7 @@ namespace MissionPlanner
         private int adsbIndex = -1;
 
         /// <summary>
-        /// used to call anything as needed.
+        /// used to call anything as needed.表示MainV2类的全局单例实例，该静态实例用于提供对MainV2实现功能的全局访问入口。
         /// </summary>
         public static MainV2 instance = null;
 
@@ -698,29 +730,30 @@ namespace MissionPlanner
             }
 
             InitializeComponent();
-
-            //Init Theme table and load BurntKermit as a default
+            // 界面主题管理
+            //Init Theme table and load BurntKermit as a default 修改初始主题，
             ThemeManager.thmColor = new ThemeColorTable(); //Init colortable
             ThemeManager.thmColor.InitColors(); //This fills up the table with BurntKermit defaults.
-            ThemeManager.thmColor
-                .SetTheme(); //Set the colors, this need to handle the case when not all colors are defined in the theme file
+            ThemeManager.thmColor.SetTheme(); //Set the colors, this need to handle the case when not all colors are defined in the theme file
 
 
-
+            // 检查主题配置是否存在，若不存在则使用白色高对比度默认主题 
             if (Settings.Instance["theme"] == null)
             {
+                
                 if (File.Exists($"{running_directory}custom.mpsystheme"))
                     Settings.Instance["theme"] = "custom.mpsystheme";
                 else
-                    Settings.Instance["theme"] = "BurntKermit.mpsystheme";
+                    Settings.Instance["theme"] = "HighContrast.mpsystheme";
             }
-
             ThemeManager.LoadTheme(Settings.Instance["theme"]);
-
             Utilities.ThemeManager.ApplyThemeTo(this);
 
 
+
+
             // define default basestream
+            // 配置默认串口参数
             comPort.BaseStream = new SerialPort();
             comPort.BaseStream.BaudRate = 57600;
             ((SerialPort)comPort.BaseStream).espFix = Settings.Instance.GetBoolean("CHK_rtsresetesp32", false);
@@ -763,6 +796,7 @@ namespace MissionPlanner
             Application.DoEvents();
 
             // load last saved connection settings
+            // 加载已保存的串口配置
             string temp = Settings.Instance.ComPort;
             if (!string.IsNullOrEmpty(temp))
             {
@@ -818,13 +852,14 @@ namespace MissionPlanner
             }
 
             ChangeUnits();
-
+            // 加载地图显示相关配置
             if (Settings.Instance["showairports"] != null)
             {
                 MainV2.ShowAirports = bool.Parse(Settings.Instance["showairports"]);
             }
 
             // set default
+            // 配置临时飞行限制显示
             ShowTFR = true;
             // load saved
             if (Settings.Instance["showtfr"] != null)
@@ -901,6 +936,10 @@ namespace MissionPlanner
             {
                 try
                 {
+                    /* 强制重置显示参数：
+                    - 禁用高级参数面板
+                    - 禁用标准参数面板
+                    - 启用完整参数列表 */
                     DisplayConfiguration = Settings.Instance.GetDisplayView("displayview");
                     //Force new view in case of saved view in config.xml
                     DisplayConfiguration.displayAdvancedParams = false;
@@ -1073,7 +1112,7 @@ namespace MissionPlanner
             {
                 this.Icon = Icon.FromHandle(((Bitmap) Program.IconFile).GetHicon());
             }
-
+            // 加载并调整ArduPilot菜单项图片尺寸
             MenuArduPilot.Image = new Bitmap(Properties.Resources._0d92fed790a3a70170e61a86db103f399a595c70,
                 (int) (200), 31);
             MenuArduPilot.Width = MenuArduPilot.Image.Width;
@@ -1147,6 +1186,7 @@ namespace MissionPlanner
             }
         }
 
+        // 切换菜单栏图标集并应用主题颜色
         public void switchicons(menuicons icons)
         {
             //Check if we starting
@@ -1156,13 +1196,15 @@ namespace MissionPlanner
                 if (displayicons.GetType() == icons.GetType())
                     return;
             }
-
+            // 应用新图标集
             displayicons = icons;
-
+            
+            // 设置菜单栏背景属性
             MainMenu.BackColor = SystemColors.MenuBar;
 
             MainMenu.BackgroundImage = displayicons.bg;
-
+            
+            // 更新所有菜单项的图标
             MenuFlightData.Image = displayicons.fd;
             MenuFlightPlanner.Image = displayicons.fp;
             MenuInitConfig.Image = displayicons.initsetup;
@@ -1171,7 +1213,7 @@ namespace MissionPlanner
             MenuConnect.Image = displayicons.connect;
             MenuHelp.Image = displayicons.help;
 
-
+            // 为所有菜单项统一应用主题文字颜色
             MenuFlightData.ForeColor = ThemeManager.TextColor;
             MenuFlightPlanner.ForeColor = ThemeManager.TextColor;
             MenuInitConfig.ForeColor = ThemeManager.TextColor;
@@ -1181,6 +1223,7 @@ namespace MissionPlanner
             MenuHelp.ForeColor = ThemeManager.TextColor;
         }
 
+        // 更新或创建ADSB飞机位置信息
         void adsb_UpdatePlanePosition(object sender, MissionPlanner.Utilities.adsb.PointLatLngAltHdg adsb)
         {
             lock (adsblock)
@@ -1197,6 +1240,7 @@ namespace MissionPlanner
                     }
 
                     // update existing
+                    // 更新飞机动态参数
                     plane.Lat = adsb.Lat;
                     plane.Lng = adsb.Lng;
                     plane.Alt = adsb.Alt;
@@ -1222,7 +1266,13 @@ namespace MissionPlanner
             }
         }
 
-
+        /// <summary>
+        /// 重置连接统计信息并更新统计窗体
+        /// 当统计窗体可见时执行完整重置操作，包括：
+        /// 1. 清理现有控件
+        /// 2. 创建新的统计实例
+        /// 3. 重新应用界面主题
+        /// </summary>
         private void ResetConnectionStats()
         {
             log.Info("Reset connection stats");
@@ -1238,6 +1288,13 @@ namespace MissionPlanner
             }
         }
 
+        /// <summary>
+        /// 显示连接统计窗体
+        /// 当窗体未初始化或已被释放时执行初始化操作：
+        /// 1. 创建固定尺寸的非缩放窗体
+        /// 2. 初始化统计控件并自动调整窗体宽度
+        /// 最终总是显示窗体并应用当前主题
+        /// </summary>
         private void ShowConnectionStatsForm()
         {
             if (this.connectionStatsForm == null || this.connectionStatsForm.IsDisposed)
@@ -1264,6 +1321,13 @@ namespace MissionPlanner
             ThemeManager.ApplyThemeTo(this.connectionStatsForm);
         }
 
+        /// <summary>
+        /// 处理串口选择控件的点击事件
+        /// 主要功能：
+        /// 1. 保存当前选择的端口值
+        /// 2. 重新加载串口列表
+        /// 3. 恢复之前选择的端口（如果仍存在）
+        /// </summary>
         private void CMB_serialport_Click(object sender, EventArgs e)
         {
             string oldport = _connectionControl.CMB_serialport.Text;
@@ -1272,6 +1336,14 @@ namespace MissionPlanner
                 _connectionControl.CMB_serialport.Text = oldport;
         }
 
+        /// <summary>
+        /// 填充串口选择下拉列表
+        /// 包含内容：
+        /// 1. 自动检测选项
+        /// 2. 系统检测到的物理串口
+        /// 3. 网络连接类型（TCP/UDP等）
+        /// 4. 额外配置的连接项
+        /// </summary>
         private void PopulateSerialportList()
         {
             _connectionControl.CMB_serialport.Items.Clear();
@@ -1290,6 +1362,7 @@ namespace MissionPlanner
             }
         }
 
+        // 显示飞行数据界面并保存配置
         private void MenuFlightData_Click(object sender, EventArgs e)
         {
             MyView.ShowScreen("FlightData");
@@ -1298,6 +1371,7 @@ namespace MissionPlanner
             SaveConfig();
         }
 
+        // 显示飞行计划界面并保存配置
         private void MenuFlightPlanner_Click(object sender, EventArgs e)
         {
             MyView.ShowScreen("FlightPlanner");
@@ -1306,6 +1380,7 @@ namespace MissionPlanner
             SaveConfig();
         }
 
+        //初始设置界面点击事件
         public void MenuSetup_Click(object sender, EventArgs e)
         {
             if (Settings.Instance.GetBoolean("password_protect") == false)
@@ -1333,11 +1408,13 @@ namespace MissionPlanner
             }
         }
 
+        // 模拟点击事件显示模拟页面
         private void MenuSimulation_Click(object sender, EventArgs e)
         {
             MyView.ShowScreen("Simulation");
         }
 
+        //配置/调试界面点击事件
         private void MenuTuning_Click(object sender, EventArgs e)
         {
             if (Settings.Instance.GetBoolean("password_protect") == false)
@@ -1364,7 +1441,11 @@ namespace MissionPlanner
                 }
             }
         }
-
+        //帮助界面点击事件
+        private void MenuHelp_Click(object sender, EventArgs e)
+        {
+            MyView.ShowScreen("Help");
+        }
         private void MenuTerminal_Click(object sender, EventArgs e)
         {
             MyView.ShowScreen("Terminal");
@@ -1821,7 +1902,7 @@ namespace MissionPlanner
             }
         }
 
-
+        //串口连接点击事件
         private void MenuConnect_Click(object sender, EventArgs e)
         {
             Connect();
@@ -1943,6 +2024,7 @@ namespace MissionPlanner
             }
         }
 
+        // 处理串口选择下拉框选项改变事件
         private void CMB_serialport_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_connectionControl.CMB_serialport.SelectedItem == _connectionControl.CMB_serialport.Text)
@@ -4027,10 +4109,7 @@ namespace MissionPlanner
             log.Info("this   width " + this.Width + " height " + this.Height);
         }
 
-        private void MenuHelp_Click(object sender, EventArgs e)
-        {
-            MyView.ShowScreen("Help");
-        }
+
 
 
         /// <summary>
@@ -4650,17 +4729,17 @@ namespace MissionPlanner
             new ConnectionOptions().Show(this);
         }
 
-        private void MenuArduPilot_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start("https://ardupilot.org/?utm_source=Menu&utm_campaign=MP");
-            }
-            catch
-            {
-                CustomMessageBox.Show("Failed to open url https://ardupilot.org");
-            }
-        }
+        //private void MenuArduPilot_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        System.Diagnostics.Process.Start("https://www.douyin.com");
+        //    }
+        //    catch
+        //    {
+        //        CustomMessageBox.Show("Failed to open url https://ardupilot.org");
+        //    }
+        //}
 
         private void connectionListToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -4796,6 +4875,11 @@ namespace MissionPlanner
                     break;
                 }
             }
+        }
+
+        private void MenuArduPilot_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -379,7 +379,7 @@ namespace MissionPlanner
         /* 显示配置静态字段（延迟初始化）
            检测自定义配置文件是否存在：
    -       存在时加载自定义视图配置
-   -       不存在时加载高级默认配置 */
+   -       不存在时加载Advanced高级默认配置 */
         private static DisplayView _displayConfiguration = File.Exists(DisplayViewExtensions.custompath)
             ? new DisplayView().Custom()
             : new DisplayView().Advanced();
@@ -625,11 +625,11 @@ namespace MissionPlanner
         public static ConnectionControl _connectionControl;
 
         public static bool TerminalTheming = true;
-
+        //更新布局 调整什么可以显示
         public void updateLayout(object sender, EventArgs e)
         {
             MenuSimulation.Visible = DisplayConfiguration.displaySimulation;
-            MenuHelp.Visible = DisplayConfiguration.displayHelp;
+            //MenuHelp.Visible = DisplayConfiguration.displayHelp;
             MissionPlanner.Controls.BackstageView.BackstageView.Advanced = DisplayConfiguration.isAdvancedMode;
 
             // force autohide on
@@ -915,8 +915,10 @@ namespace MissionPlanner
             }
 
             //set first instance display configuration
+            // 检查显示配置是否为初始状态
             if (DisplayConfiguration == null)
             {
+                // 初始化为首选配置方案：高级模式
                 DisplayConfiguration = DisplayConfiguration.Advanced();
             }
 
@@ -1112,13 +1114,7 @@ namespace MissionPlanner
             {
                 this.Icon = Icon.FromHandle(((Bitmap) Program.IconFile).GetHicon());
             }
-            // 加载并调整ArduPilot菜单项图片尺寸
-            MenuArduPilot.Image = new Bitmap(Properties.Resources._0d92fed790a3a70170e61a86db103f399a595c70,
-                (int) (200), 31);
-            MenuArduPilot.Width = MenuArduPilot.Image.Width;
 
-            if (Program.Logo2 != null)
-                MenuArduPilot.Image = Program.Logo2;
 
             Application.DoEvents();
 
@@ -1211,7 +1207,7 @@ namespace MissionPlanner
             MenuSimulation.Image = displayicons.sim;
             MenuConfigTune.Image = displayicons.config_tuning;
             MenuConnect.Image = displayicons.connect;
-            MenuHelp.Image = displayicons.help;
+            //MenuHelp.Image = displayicons.help;
 
             // 为所有菜单项统一应用主题文字颜色
             MenuFlightData.ForeColor = ThemeManager.TextColor;
@@ -1220,7 +1216,7 @@ namespace MissionPlanner
             MenuSimulation.ForeColor = ThemeManager.TextColor;
             MenuConfigTune.ForeColor = ThemeManager.TextColor;
             MenuConnect.ForeColor = ThemeManager.TextColor;
-            MenuHelp.ForeColor = ThemeManager.TextColor;
+            //MenuHelp.ForeColor = ThemeManager.TextColor;
         }
 
         // 更新或创建ADSB飞机位置信息
@@ -2058,21 +2054,33 @@ namespace MissionPlanner
         /// <summary>
         /// overriding the OnCLosing is a bit cleaner than handling the event, since it
         /// is this object.
-        ///
+        ///处理主窗体关闭前的资源清理和状态保存操作
+        /// 
+        /// 重写基类OnClosing方法，在窗体关闭前执行：
+        /// 1. 保存窗口尺寸、位置和状态到配置
+        /// 2. 加速地图瓦片缓存写入
+        /// 3. 关闭所有日志文件和通信端口
+        /// 4. 停止后台服务（ADSB、警告引擎、视频流等）
+        /// 5. 清理插件线程和各类资源
+        /// 6. 异步排序飞行日志文件
+        /// 7. 释放视图组件
+        /// 8. 最终保存应用配置
         /// This happens before FormClosed
         /// </summary>
         /// <param name="e"></param>
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-
+            // 窗体关闭日志记录
             log.Info("MainV2_FormClosing");
 
+            /// 加速地图缓存写入
             log.Info("GMaps write cache");
             // speed up tile saving on exit
             GMap.NET.GMaps.Instance.CacheOnIdleRead = false;
             GMap.NET.GMaps.Instance.BoostCacheEngine = true;
 
+            /// 保存窗口状态到应用程序设置
             Settings.Instance["MainHeight"] = this.Height.ToString();
             Settings.Instance["MainWidth"] = this.Width.ToString();
             Settings.Instance["MainMaximised"] = this.WindowState.ToString();
@@ -2080,6 +2088,7 @@ namespace MissionPlanner
             Settings.Instance["MainLocX"] = this.Location.X.ToString();
             Settings.Instance["MainLocY"] = this.Location.Y.ToString();
 
+            /// 关闭主通信端口的日志文件
             log.Info("close logs");
 
             // close bases connection
@@ -2099,6 +2108,7 @@ namespace MissionPlanner
             {
             }
 
+            /// 关闭所有通信端口的日志文件
             log.Info("close ports");
             // close all connections
             foreach (var port in Comports)
@@ -2119,7 +2129,7 @@ namespace MissionPlanner
                 {
                 }
             }
-
+            // 停止后台服务组件
             log.Info("stop adsb");
             Utilities.adsb.Stop();
 
@@ -2129,6 +2139,7 @@ namespace MissionPlanner
             log.Info("stop GStreamer");
             GCSViews.FlightData.hudGStreamer.Stop();
 
+            /// 清理视频渲染资源
             log.Info("closing vlcrender");
             try
             {
@@ -2139,6 +2150,7 @@ namespace MissionPlanner
             {
             }
 
+            // 停止插件线程
             log.Info("closing pluginthread");
 
             pluginthreadrun = false;
@@ -2156,6 +2168,7 @@ namespace MissionPlanner
                 pluginthread.Join();
             }
 
+            // 终止其他后台线程
             log.Info("closing serialthread");
 
             serialThread = false;
@@ -2168,11 +2181,13 @@ namespace MissionPlanner
 
             joystickthreadrun = false;
 
+            // 停止HTTP服务
             log.Info("closing httpthread");
 
             // if we are waiting on a socket we need to force an abort
             httpserver.Stop();
 
+            // 异步排序飞行日志文件
             log.Info("sorting tlogs");
             try
             {
@@ -2191,12 +2206,13 @@ namespace MissionPlanner
             catch
             {
             }
-
+            /// 释放视图资源
             log.Info("closing MyView");
 
             // close all tabs
             MyView.Dispose();
 
+            /// 清理各功能模块
             log.Info("closing fd");
             try
             {
@@ -2224,6 +2240,7 @@ namespace MissionPlanner
             {
             }
 
+            // 关闭主通信端口
             try
             {
                 if (comPort.BaseStream.IsOpen)
@@ -2234,8 +2251,10 @@ namespace MissionPlanner
             } // i get alot of these errors, the port is still open, but not valid - user has unpluged usb
 
             // save config
+            // 最终配置保存
             SaveConfig();
 
+            // 线程状态检查（调试用）
             Console.WriteLine(httpthread?.IsAlive);
             Console.WriteLine(pluginthread?.IsAlive);
 
@@ -2309,6 +2328,21 @@ namespace MissionPlanner
 
         /// <summary>
         /// thread used to send joystick packets to the MAV
+        /// 
+        /// 摇杆数据发送线程，持续向MAV设备发送遥控指令数据包
+        /// 主要功能：
+        /// 1. 根据配置选择RC通道覆盖模式或手动控制模式
+        /// 2. 自动调节数据发送频率（当前注释状态）
+        /// 3. 支持SITL仿真模式的特殊处理
+        /// 4. 包含线程安全控制机制
+        /// 工作流程：
+        /// - 通过while循环维持线程运行（受joystickthreadrun控制）
+        /// - 使用40ms间隔的异步延迟保持约25Hz的基础频率
+        /// - 根据连接状态自动调整发送速率（当前调整逻辑被注释）
+        /// - 处理两种控制模式：
+        ///   a) RC通道覆盖模式：支持18个通道的PWM值设置
+        ///   b) 手动控制模式：处理4轴的基本控制量
+        /// - 包含串口缓冲区保护机制（BytesToWrite < 50）
         /// </summary>
         private async void joysticksend()
         {
@@ -2521,6 +2555,7 @@ namespace MissionPlanner
 
         /// <summary>
         /// Used to fix the icon status for unexpected unplugs etc...
+        ///  更新连接状态指示图标和关联控件状态（用于处理异常断开等状态同步问题）
         /// </summary>
         private void UpdateConnectIcon()
         {
@@ -2568,7 +2603,14 @@ namespace MissionPlanner
         }
 
         ManualResetEvent PluginThreadrunner = new ManualResetEvent(false);
-
+        // <summary>
+        /// 插件管理线程函数，负责周期性地执行已加载插件的循环任务
+        /// 功能说明：
+        /// 1. 维护插件执行时间表，根据插件设定的频率进行调度
+        /// 2. 通过智能休眠机制平衡CPU使用率（最高100Hz）
+        /// 3. 在停止时执行所有插件的退出清理操作
+        /// 4. 使用ManualResetEvent同步线程状态
+        /// </summary>
         private void PluginThread()
         {
             Hashtable nextrun = new Hashtable();
@@ -2645,7 +2687,6 @@ namespace MissionPlanner
             return;
         }
 
-        ManualResetEvent SerialThreadrunner = new ManualResetEvent(false);
 
         /// <summary>
         /// main serial reader thread
@@ -2656,35 +2697,56 @@ namespace MissionPlanner
         /// heartbeat packet sending
         ///
         /// and can't fall out
+        /// /// 串口数据读取主线程函数
+        /// 功能：
+        /// 1. 管理串口连接状态和数据显示
+        /// 2. 处理多种语音警报（电池、空速、高度、数据丢失等）
+        /// 3. 维护心跳包通信
+        /// 4. 处理飞行器解锁状态变化
+        /// 5. 监控链路质量
+        /// 注意事项：
+        /// - 使用异步任务处理避免阻塞UI线程
+        /// - 通过serialThread标志控制线程生命周期
+        /// - 包含复杂的状态管理和多线程操作
         /// </summary>
+
+        // 使用 ManualResetEvent 控制串口线程的同步
+        ManualResetEvent SerialThreadrunner = new ManualResetEvent(false);
+
+        // 异步串口数据读取主方法
         private async void SerialReader()
         {
+            // 防止重复启动线程
             if (serialThread == true)
                 return;
             serialThread = true;
 
+            // 重置同步事件（阻塞其他线程）
             SerialThreadrunner.Reset();
 
-            int minbytes = 10;
+            int minbytes = 10;// 最小读取字节阈值
 
-            int altwarningmax = 0;
+            int altwarningmax = 0;// 最大高度警告记录
 
-            bool armedstatus = false;
+            bool armedstatus = false;// 飞行器锁定状态
 
-            string lastmessagehigh = "";
+            string lastmessagehigh = "";// 最后播报的重要消息
 
-            DateTime speechcustomtime = DateTime.Now;
+            DateTime speechcustomtime = DateTime.Now;// 自定义语音时间戳
 
-            DateTime speechlowspeedtime = DateTime.Now;
+            DateTime speechlowspeedtime = DateTime.Now;// 低速警告时间戳
 
-            DateTime linkqualitytime = DateTime.Now;
+            DateTime linkqualitytime = DateTime.Now;// 连接质量更新时间戳
 
+            // 主循环（serialThread 为 false 时退出）
             while (serialThread)
             {
                 try
                 {
+                    // 异步等待1ms（释放CPU资源）
                     await Task.Delay(1).ConfigureAwait(false); // was 5
 
+                    // 检查串口类型和连接状态
                     try
                     {
                         if (ConfigTerminal.comPort is MAVLinkSerialPort)
@@ -2701,7 +2763,7 @@ namespace MissionPlanner
                         log.Error(ex);
                     }
 
-                    // update connect/disconnect button and info stats
+                    // update connect/disconnect button and info stats// 更新UI连接状态
                     try
                     {
                         UpdateConnectIcon();
@@ -2712,6 +2774,15 @@ namespace MissionPlanner
                     }
 
                     // 30 seconds interval speech options
+                    // /*----- 语音警报系统 -----*/
+                    /* 包含：
+                    - 自定义语音提醒
+                    - 电池电压/电量警报
+                    - 空速/地速过低警报
+                    - 高度警报
+                    - 系统消息播报 */
+
+                    // 每30秒执行自定义语音提示
                     if (speechEnabled() && (DateTime.UtcNow - speechcustomtime).TotalSeconds > 30 &&
                         (MainV2.comPort.logreadmode || comPort.BaseStream.IsOpen))
                     {
@@ -2728,6 +2799,8 @@ namespace MissionPlanner
 
                         // speech for battery alerts
                         //speechbatteryvolt
+                        // 电池警报检测
+                        /* 电压和百分比双重检测机制 */
                         float warnvolt = Settings.Instance.GetFloat("speechbatteryvolt");
                         float warnpercent = Settings.Instance.GetFloat("speechbatterypercent");
 
@@ -2756,6 +2829,7 @@ namespace MissionPlanner
                     }
 
                     // speech for airspeed alerts
+                    // 空速/地速检测
                     if (speechEnabled() && (DateTime.UtcNow - speechlowspeedtime).TotalSeconds > 10 &&
                         (MainV2.comPort.logreadmode || comPort.BaseStream.IsOpen))
                     {
@@ -2793,6 +2867,8 @@ namespace MissionPlanner
                     }
 
                     // speech altitude warning - message high warning
+                    // 高度警报处理
+                    /* 最高高度记录和阈值检测 */
                     if (speechEnabled() &&
                         (MainV2.comPort.logreadmode || comPort.BaseStream.IsOpen))
                     {
@@ -2823,7 +2899,8 @@ namespace MissionPlanner
                         {
                         } // silent fail
 
-
+                        // 高优先级消息处理
+                        /* 过滤PX4系统消息和PreArm消息 */
                         try
                         {
                             // say the latest high priority message
@@ -2851,6 +2928,8 @@ namespace MissionPlanner
                     }
 
                     // attenuate the link qualty over time
+                    /*----- 连接质量管理 -----*/
+                    // 衰减连接质量指示
                     if ((DateTime.UtcNow - MainV2.comPort.MAV.lastvalidpacket).TotalSeconds >= 1)
                     {
                         if (linkqualitytime.Second != DateTime.UtcNow.Second)
@@ -2860,6 +2939,7 @@ namespace MissionPlanner
                             linkqualitytime = DateTime.UtcNow;
 
                             // force redraw if there are no other packets are being read
+                            // 强制刷新HUD显示
                             this.BeginInvokeIfRequired(
                                 (Action)
                                 delegate { GCSViews.FlightData.myhud.Invalidate(); });
@@ -2867,6 +2947,8 @@ namespace MissionPlanner
                     }
 
                     // data loss warning - wait min of 3 seconds, ignore first 30 seconds of connect, repeat at 5 seconds interval
+                    // 数据丢失警告
+                    /* 3秒无数据触发，30秒连接稳定期，5秒重复间隔 */
                     if ((DateTime.UtcNow - MainV2.comPort.MAV.lastvalidpacket).TotalSeconds > 3
                         && (DateTime.UtcNow - connecttime).TotalSeconds > 30
                         && (DateTime.UtcNow - nodatawarning).TotalSeconds > 5
@@ -2886,6 +2968,9 @@ namespace MissionPlanner
                     }
 
                     // get home point on armed status change.
+                    /*----- 飞行状态变化处理 -----*/
+                    // 锁定状态处理
+                    /* 触发时获取家位置并更新飞行计划界面 */
                     if (armedstatus != MainV2.comPort.MAV.cs.armed && comPort.BaseStream.IsOpen)
                     {
                         armedstatus = MainV2.comPort.MAV.cs.armed;
@@ -2939,10 +3024,13 @@ namespace MissionPlanner
                         }
                     }
 
+                    // 参数接收进度更新
+                    /* 在UI线程更新进度条状态 */
                     if (comPort.MAV.param.TotalReceived < comPort.MAV.param.TotalReported)
                     {
                         if (comPort.MAV.param.TotalReported > 0 && comPort.BaseStream.IsOpen)
                         {
+                            // 计算并更新状态栏进度百分比...
                             this.BeginInvokeIfRequired(() =>
                             {
                                 try
@@ -2960,8 +3048,11 @@ namespace MissionPlanner
                     }
 
                     // send a hb every seconds from gcs to ap
+                    // 心跳包维护
+                    /* 每秒发送心跳包并处理参数轮询 */
                     if (heatbeatSend.Second != DateTime.UtcNow.Second)
                     {
+                        // 构造MAVLink心跳包...
                         MAVLink.mavlink_heartbeat_t htb = new MAVLink.mavlink_heartbeat_t()
                         {
                             type = (byte) MAVLink.MAV_TYPE.GCS,
@@ -3033,7 +3124,7 @@ namespace MissionPlanner
                                             continue;
                                         sentmavlink1 = true;
                                     }
-
+                                    // 发送MAVLink心跳包...
                                     port.sendPacket(htb, MAV.sysid, MAV.compid);
                                 }
                                 catch (Exception ex)
@@ -3076,6 +3167,7 @@ namespace MissionPlanner
                         if (!comPort.BaseStream.IsOpen)
                         {
                             // check if other ports are still open
+                           
                             foreach (var port in Comports)
                             {
                                 if (port.BaseStream.IsOpen)
@@ -3091,6 +3183,8 @@ namespace MissionPlanner
                     }
 
                     // read the interfaces
+                    // 串口数据读取
+                    /* 多端口数据读取和状态更新 */
                     foreach (var port in Comports.ToArray())
                     {
                         if (!port.BaseStream.IsOpen)
@@ -3109,6 +3203,7 @@ namespace MissionPlanner
 
                         // must be open, we have bytes, we are not yielding the port,
                         // the thread is meant to be running and we only spend 1 seconds max in this read loop
+                        // 异步读取数据包
                         while (port.BaseStream.IsOpen && port.BaseStream.BytesToRead > minbytes &&
                                port.giveComport == false && serialThread && startread.AddSeconds(1) > DateTime.UtcNow)
                         {
@@ -3123,6 +3218,7 @@ namespace MissionPlanner
                         }
 
                         // update currentstate of sysids on the port
+                        // 更新所有MAV状态
                         foreach (var MAV in port.MAVlist)
                         {
                             try
@@ -3138,6 +3234,7 @@ namespace MissionPlanner
                 }
                 catch (Exception e)
                 {
+                    // 全局异常处理（记录日志并尝试关闭连接）
                     Tracking.AddException(e);
                     log.Error("Serial Reader fail :" + e.ToString());
                     try
@@ -3150,11 +3247,27 @@ namespace MissionPlanner
                     }
                 }
             }
-
+            // 线程结束处理
             Console.WriteLine("SerialReader Done");
+            // 通知其他线程可继续执行
             SerialThreadrunner.Set();
         }
 
+        /// <summary>
+        /// ADSB定期数据发送线程
+        /// 
+        /// 功能说明：
+        /// 1. 每1000ms循环执行一次
+        /// 2. 清理30秒前的过期飞机数据
+        /// 3. 筛选10公里内最近的10架飞机（排除来自MAVLink的数据源）
+        /// 4. 按循环索引选择当前要发送的飞机数据
+        /// 5. 构建MAVLink协议包并发送
+        /// 
+        /// 注意事项：
+        /// - 使用adsblock对象进行线程同步
+        /// - 通过ManualResetEvent控制线程生命周期
+        /// - 需要处理ICAO地址的格式转换异常
+        /// </summary>
         ManualResetEvent ADSBThreadRunner = new ManualResetEvent(false);
 
         /// <summary>
@@ -3166,10 +3279,12 @@ namespace MissionPlanner
                 return;
             adsbThread = true;
             ADSBThreadRunner.Reset();
+            // 主处理循环（每秒执行
             while (adsbThread)
             {
                 await Task.Delay(1000).ConfigureAwait(false); // run every 1000 ms
                 // Clean up old planes
+                // 清理过期飞机数据（超过30秒未更新
                 HashSet<string> planesToClean = new HashSet<string>();
                 lock(adsblock)
                 {
@@ -3177,8 +3292,14 @@ namespace MissionPlanner
                     planesToClean.ForEach(a => MainV2.instance.adsbPlanes.TryRemove(a, out _));
 
                 }
+                // 获取当前设备位置
                 PointLatLngAlt ourLocation = comPort.MAV.cs.Location;
                 // Get only close planes, sorted by distance
+                 /* 筛选最近的10架飞机：
+                  * - 距离不超过10公里
+                  * - 排除来自MAVLink的数据源
+                  * - 按距离升序排列
+                  */
                 var relevantPlanes = MainV2.instance.adsbPlanes
                     .Select(v => new { v, Distance = v.Value.GetDistance(ourLocation) })
                     .Where(v => v.Distance <= 10000)
@@ -3187,12 +3308,15 @@ namespace MissionPlanner
                     .Select(v => v.v.Value)
                     .Take(10)
                     .ToList();
+
+                // 循环索引处理（限制在0-9之间）
                 adsbIndex = (++adsbIndex % Math.Max(1, Math.Min(relevantPlanes.Count, 10)));
                 var currentPlane = relevantPlanes.ElementAtOrDefault(adsbIndex);
                 if (currentPlane == null)
                 {
                     continue;
                 }
+                // 构造MAVLink协议数据包
                 MAVLink.mavlink_adsb_vehicle_t packet = new MAVLink.mavlink_adsb_vehicle_t();
                 packet.altitude = (int)(currentPlane.Alt * 1000);
                 packet.altitude_type = (byte)MAVLink.ADSB_ALTITUDE_TYPE.GEOMETRIC;
@@ -3216,22 +3340,39 @@ namespace MissionPlanner
                 packet.flags = (ushort)(MAVLink.ADSB_FLAGS.VALID_ALTITUDE | MAVLink.ADSB_FLAGS.VALID_COORDS |
                                           MAVLink.ADSB_FLAGS.VALID_VELOCITY | MAVLink.ADSB_FLAGS.VALID_HEADING | MAVLink.ADSB_FLAGS.VALID_CALLSIGN);
 
+
                 //send to current connected
+                // 发送给飞控
                 MainV2.comPort.sendPacket(packet, MainV2.comPort.MAV.sysid, MainV2.comPort.MAV.compid);
 
             }
 
         }
 
-
+        /// <summary>
+        /// 应用程序初始化流程，包含：
+        /// 1. 核心模块启动（串口读取、ADSB发送、插件线程）
+        /// 2. 后台资源加载（地理数据、机场信息、地图生成等）
+        /// 3. 自动连接处理（Mavlink连接、视频流检测）
+        /// 4. 视频渲染配置（GStreamer/VLC/MJPEG处理）
+        /// 5. 网络服务发现（ZeroConf协议设备探测）
+        /// 6. 命令行参数处理（日志回放、脚本执行等）
+        /// </summary>
+        /// <remarks>
+        /// 采用多线程架构设计，主要包含：
+        /// - 主线程：UI操作和核心服务
+        /// - 线程池：后台资源加载
+        /// - 专用线程：插件运行
+        /// - 异步任务：警报获取
+        /// </remarks>
         protected override void OnLoad(EventArgs e)
         {
             // check if its defined, and force to show it if not known about
+            // 初始化菜单自动隐藏设置（首次运行时设置默认值）
             if (Settings.Instance["menu_autohide"] == null)
             {
                 Settings.Instance["menu_autohide"] = "false";
             }
-
             try
             {
                 AutoHideMenu(Settings.Instance.GetBoolean("menu_autohide"));
@@ -3239,7 +3380,8 @@ namespace MissionPlanner
             catch
             {
             }
-
+            /*----- 主界面视图初始化 -----*/
+            // 添加核心功能视图模块
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
             MyView.AddScreen(new MainSwitcher.Screen("HWConfig", typeof(GCSViews.InitialSetup), false));
@@ -3247,6 +3389,7 @@ namespace MissionPlanner
             MyView.AddScreen(new MainSwitcher.Screen("Simulation", Simulation, true));
             MyView.AddScreen(new MainSwitcher.Screen("Help", typeof(GCSViews.Help), false));
 
+            /*----- 插件系统初始化 -----*/
             try
             {
                 if (Control.ModifierKeys == Keys.Shift)
@@ -3267,6 +3410,7 @@ namespace MissionPlanner
                 log.Error(ex);
             }
 
+            /*----- 界面布局初始化 -----*/
             if (Program.Logo != null && Program.name == "VVVVZ")
             {
                 this.PerformLayout();
@@ -3284,10 +3428,11 @@ namespace MissionPlanner
 
             // for long running tasks using own threads.
             // for short use threadpool
-
-            this.SuspendLayout();
+            /*----- 后台服务启动 -----*/
+            this.SuspendLayout(); //暂停界面更新
 
             // setup http server
+            // HTTP服务器（用于视频流/KML数据传输）
             try
             {
                 log.Info("start http");
@@ -3303,7 +3448,7 @@ namespace MissionPlanner
                 log.Error("Error starting TCP listener thread: ", ex);
                 CustomMessageBox.Show(ex.ToString());
             }
-
+            // 操纵杆输入处理
             log.Info("start joystick");
             try
             {
@@ -3315,6 +3460,7 @@ namespace MissionPlanner
                 log.Error(ex);
             }
 
+            // 主串口数据读取线程
             log.Info("start serialreader");
             try
             {
@@ -3326,6 +3472,7 @@ namespace MissionPlanner
                 log.Error(ex);
             }
 
+            // ADS-B数据发送线程
             log.Info("start adsbsender");
             try
             {
@@ -3336,6 +3483,7 @@ namespace MissionPlanner
                 log.Error(ex);
             }
 
+            // 插件运行线程（低优先级后台执行）
             log.Info("start plugin thread");
             try
             {
@@ -3353,27 +3501,29 @@ namespace MissionPlanner
                 log.Error(ex);
             }
 
+            /*----- 并行后台任务队列 -----*/
+            // 使用线程池加载各类地理数据
+            ThreadPool.QueueUserWorkItem(LoadGDALImages);// 加载GDAL地图数据
 
-            ThreadPool.QueueUserWorkItem(LoadGDALImages);
+            ThreadPool.QueueUserWorkItem(BGLoadAirports); // 加载机场数据
 
-            ThreadPool.QueueUserWorkItem(BGLoadAirports);
-
-            ThreadPool.QueueUserWorkItem(BGCreateMaps);
+            ThreadPool.QueueUserWorkItem(BGCreateMaps); // 生成地图缓存
 
             //ThreadPool.QueueUserWorkItem(BGGetAlmanac);
 
-            ThreadPool.QueueUserWorkItem(BGLogMessagesMetaData);
+            ThreadPool.QueueUserWorkItem(BGLogMessagesMetaData);// 日志元数据处理
 
             // tfr went dead on 30-9-2020
             //ThreadPool.QueueUserWorkItem(BGgetTFR);
 
-            ThreadPool.QueueUserWorkItem(BGNoFly);
+            ThreadPool.QueueUserWorkItem(BGNoFly);// 获取禁飞区数据
 
-            ThreadPool.QueueUserWorkItem(BGGetKIndex);
+            ThreadPool.QueueUserWorkItem(BGGetKIndex);// 获取地磁指数
 
             // update firmware version list - only once per day
-            ThreadPool.QueueUserWorkItem(BGFirmwareCheck);
+            ThreadPool.QueueUserWorkItem(BGFirmwareCheck);// 每日固件版本检查
 
+            // 异步获取用户警报信息
             Task.Run(async () =>
             {
                 try
@@ -3385,9 +3535,11 @@ namespace MissionPlanner
                 }
             });
 
+            /*----- 自动连接事件处理 -----*/
             log.Info("start AutoConnect");
             AutoConnect.NewMavlinkConnection += (sender, serial) =>
             {
+                // 当检测到新MAVLink设备时的连接处理
                 try
                 {
                     log.Info("AutoConnect.NewMavlinkConnection " + serial.PortName);
@@ -3395,11 +3547,12 @@ namespace MissionPlanner
                     {
                         if (MainV2.comPort.BaseStream.IsOpen)
                         {
+                            // 创建新MAVLink接口实例
                             var mav = new MAVLinkInterface();
                             mav.BaseStream = serial;
                             MainV2.instance.doConnect(mav, "preset", serial.PortName);
 
-                            MainV2.Comports.Add(mav);
+                            MainV2.Comports.Add(mav);// 添加到连接列表
 
                             try
                             {
@@ -3419,6 +3572,8 @@ namespace MissionPlanner
                     log.Error(ex);
                 }
             };
+
+            // 处理新视频流（GStreamer管道初始化）
             AutoConnect.NewVideoStream += (sender, gststring) =>
             {
                 MainV2.instance.BeginInvoke((Action) delegate
@@ -3455,7 +3610,7 @@ namespace MissionPlanner
                     }
                 });
             };
-            AutoConnect.Start();
+            AutoConnect.Start();// 开始自动检测设备
 
             BinaryLog.onFlightMode += (firmware, modeno) =>
             {
@@ -3909,6 +4064,7 @@ namespace MissionPlanner
                 }
             }
 
+            /*----- 地图标记配置 -----*/
             GMapMarkerBase.length = Settings.Instance.GetInt32("GMapMarkerBase_length", 500);
             GMapMarkerBase.DisplayCOGSetting = Settings.Instance.GetBoolean("GMapMarkerBase_DisplayCOG", true);
             GMapMarkerBase.DisplayHeadingSetting = Settings.Instance.GetBoolean("GMapMarkerBase_DisplayHeading", true);
@@ -3922,12 +4078,14 @@ namespace MissionPlanner
             Settings.Instance["GMapMarkerBase_InactiveDisplayStyle"] = inactiveDisplayStyle.ToString();
         }
 
+        // 日志元数据处理
         private void BGLogMessagesMetaData(object nothing)
         {
             LogMetaData.GetMetaData().ConfigureAwait(false).GetAwaiter().GetResult();
             LogMetaData.ParseMetaData();
         }
 
+        // 加载GDAL地图数据
         public void LoadGDALImages(object nothing)
         {
             if (Settings.Instance.ContainsKey("GDALImageDir"))
@@ -3977,6 +4135,7 @@ namespace MissionPlanner
             return cmdargs;
         }
 
+        // 每日固件版本检查
         private void BGFirmwareCheck(object state)
         {
             try
@@ -3994,6 +4153,7 @@ namespace MissionPlanner
             }
         }
 
+        // 获取地磁指数
         private void BGGetKIndex(object state)
         {
             try
@@ -4017,7 +4177,7 @@ namespace MissionPlanner
                 log.Error(ex);
             }
         }
-
+        // 获取禁飞区数据
         private void BGNoFly(object state)
         {
             try
@@ -4037,6 +4197,7 @@ namespace MissionPlanner
             Settings.Instance["kindex"] = CurrentState.KIndexstatic.ToString();
         }
 
+        // 生成地图缓存
         private void BGCreateMaps(object state)
         {
             // sort logs

@@ -1014,7 +1014,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
         {
             Settings.Instance["norcreceiver"] = chk_norcreceiver.Checked.ToString();
         }
-
+        //选择主题（基本，高级，自定义）
         private void CMB_Layout_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((DisplayNames)CMB_Layout.SelectedItem == DisplayNames.Advanced)

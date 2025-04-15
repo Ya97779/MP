@@ -688,7 +688,7 @@ namespace MissionPlanner.GCSViews
                 }
             }
         }
-
+        //决定初始功能栏显示，可以右键标签将不显示的显示出来，键值对 与DisplayView组合更改。
         private void updateDisplayTabControlActions()
         {
             TabListDisplay.Clear();
@@ -710,7 +710,8 @@ namespace MissionPlanner.GCSViews
             TabListDisplay.Add(tabScripts.Name, MainV2.DisplayConfiguration.displayScriptsTab);
 
             TabListDisplay.Add(tabTLogs.Name, MainV2.DisplayConfiguration.displayTelemetryTab);
-
+            
+            //数据闪存日志
             TabListDisplay.Add(tablogbrowse.Name, MainV2.DisplayConfiguration.displayDataflashTab);
 
             TabListDisplay.Add(tabPagemessages.Name, MainV2.DisplayConfiguration.displayMessagesTab);
@@ -2533,7 +2534,7 @@ namespace MissionPlanner.GCSViews
                 return;
             }
         }
-
+        //功能栏右键 自定义
         private void customizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (Form customForm = new Form())
@@ -2565,7 +2566,7 @@ namespace MissionPlanner.GCSViews
                             left.Items.Add(tabPage.Name, false);
                     }
                 }
-
+                
                 ThemeManager.ApplyThemeTo(customForm);
 
                 customForm.ShowDialog();

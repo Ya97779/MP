@@ -143,7 +143,7 @@ namespace MissionPlanner.Utilities
 
             //flight Data view
             displayAnenometer = true;
-            displayQuickTab = true;
+            displayQuickTab = false;
             displayPreFlightTab = true;
             displayAdvActionsTab = false;
             displaySimpleActionsTab = true;
@@ -362,11 +362,12 @@ namespace MissionPlanner.Utilities
                 displayHelp = true,
 
                 //flight Data view
+                //设置右键后相关标签是否可见,仅会决定右键标签是否显示，不会决定初始加载是否显示
                 displayAnenometer = true,
                 displayQuickTab = true,
                 displayPreFlightTab = true,
                 displayAdvActionsTab = true,
-                displaySimpleActionsTab = false,
+                displaySimpleActionsTab = true,
                 displayGaugesTab = true,
                 displayStatusTab = true,
                 displayServoTab = true,

@@ -11,10 +11,16 @@ using System.Xml;
 namespace MissionPlanner.Utilities
 {
     /// <summary>
+    /// 应用程序设置管理类，提供跨会话的配置持久化功能，实现配置数据的加载、保存、访问和类型转换等功能
     /// This class loads and saves some handy app level settings so UI state is preserved across sessions.
     /// </summary>
     public class Settings
     {
+        /// <summary>
+        /// 单例实例访问器，懒汉模式
+        /// <para>首次访问时自动加载配置文件</para>
+        /// </summary>
+        /// 
         static Settings _instance;
 
         public static string AppConfigName { get; set; } = "Mission Planner";

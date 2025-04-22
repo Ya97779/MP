@@ -255,11 +255,25 @@ namespace MissionPlanner
         public float customfield18 { get; set; }
         public float customfield19 { get; set; }
 
+
+        //添加涡喷参数
+        [GroupText("VTOL")]
+        [DisplayText("1号涡喷推力 (N)")]
+        public float Force1 { get; set; }
+
+        [GroupText("VTOL")]
+        [DisplayText("1号涡喷转速 (rpm)")]
+        public float RotationalSpeed1 { get; set; }
+
+
+
         // orientation - rads
         [DisplayFieldName("roll.Field")]
         [DisplayText("Roll (deg)")]
         [GroupText("Attitude")]
         public float roll { get; set; }
+
+
 
         [GroupText("Attitude")]
         [DisplayFieldName("pitch.Field")]
@@ -2229,6 +2243,7 @@ namespace MissionPlanner
             return MemberwiseClone();
         }
 
+        //Mavlink消息包解析方法
         private void Parent_OnPacketReceived(object sender, MAVLink.MAVLinkMessage mavLinkMessage)
         {
             if (mavLinkMessage.sysid == parent.sysid && mavLinkMessage.compid == parent.compid

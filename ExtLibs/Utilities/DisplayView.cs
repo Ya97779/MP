@@ -357,9 +357,9 @@ namespace MissionPlanner.Utilities
             {
                 displayName = DisplayNames.Advanced,
                 //MainV2 buttons
-                displaySimulation = true,
-                displayDonate = true,
-                displayHelp = true,
+                displaySimulation =true,
+                displayDonate = false,
+                displayHelp = false,
 
                 //flight Data view
                 //设置右键后相关标签是否可见,仅会决定右键标签是否显示，不会决定初始加载是否显示

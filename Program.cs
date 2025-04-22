@@ -271,7 +271,7 @@ namespace MissionPlanner
             if (SplashBG != null)
             {
                 Splash.BackgroundImage = SplashBG;
-                Splash.pictureBox1.Visible = false;
+                
             }
 
             Console.WriteLine("IconFile");
@@ -281,7 +281,8 @@ namespace MissionPlanner
             string strVersion = File.Exists("version.txt")
                 ? File.ReadAllText("version.txt")
                 : System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            Splash.Text = name + " " + Application.ProductVersion + " build " + strVersion;
+            //设置窗口名称
+            Splash.Text = name + "  V" + Application.ProductVersion;//+ " build " + strVersion;
             Console.WriteLine("Splash.Show()");
             //显示启动画面
             Splash.Show();
@@ -324,13 +325,17 @@ namespace MissionPlanner
             Console.WriteLine("Setup GMaps 1");
             // set the cache provider to my custom version
             /* 地图系统配置 */
-            // 初始化地图缓存和提供商
+            // 初始化地图缓存模式和提供商
             GMap.NET.GMaps.Instance.PrimaryCache = new Maps.MyImageCache();
             if (Settings.Instance["mapCache"] != null)
             {
                 GMap.NET.GMaps.Instance.Mode = (GMap.NET.AccessMode)Enum.Parse(typeof(GMap.NET.AccessMode), Settings.Instance["mapCache"].ToString());
                 log.Info("Map access mode set to : " + GMap.NET.GMaps.Instance.Mode.ToString());
             }
+            //设置地图缓存模式为：在线离线混合
+            Console.WriteLine(GMap.NET.GMaps.Instance.Mode.ToString());
+            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerAndCache;
+            Console.WriteLine(GMap.NET.GMaps.Instance.Mode.ToString());
             Console.WriteLine("Setup GMaps 2");
             // add my custom map providers
             // 添加多个自定义地图提供商（WMS、WMTS、MapBox等）
@@ -352,8 +357,9 @@ namespace MissionPlanner
             GMap.NET.MapProviders.GMapProviders.List.Add(Maps.Japan_Relief.Instance);
             GMap.NET.MapProviders.GMapProviders.List.Add(Maps.Japan_Slopezone.Instance);
             GMap.NET.MapProviders.GMapProviders.List.Add(Maps.Japan_Sea.Instance);
+            
 
-            if(Xamarin.Essentials.DeviceInfo.Idiom == Xamarin.Essentials.DeviceIdiom.Desktop || Xamarin.Essentials.DeviceInfo.Idiom == Xamarin.Essentials.DeviceIdiom.Unknown)
+            if (Xamarin.Essentials.DeviceInfo.Idiom == Xamarin.Essentials.DeviceIdiom.Desktop || Xamarin.Essentials.DeviceInfo.Idiom == Xamarin.Essentials.DeviceIdiom.Unknown)
                 ZedGraph.PaneBase.Default.IsFontsScaled = false;
 
             if(Xamarin.Essentials.DeviceInfo.Platform != Xamarin.Essentials.DevicePlatform.Unknown)

@@ -145,15 +145,6 @@
   <data name="hud1.Size" type="System.Drawing.Size, System.Drawing">
     <value>298, 265</value>
   </data>
-  <data name="customizeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>210, 24</value>
-  </data>
-  <data name="multiLineToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>210, 24</value>
-  </data>
-  <data name="contextMenuStripactionstab.Size" type="System.Drawing.Size, System.Drawing">
-    <value>211, 80</value>
-  </data>
   <data name="quickView6.Location" type="System.Drawing.Point, System.Drawing">
     <value>145, 93</value>
   </data>
@@ -327,6 +318,160 @@
   </data>
   <data name="tabPagemessages.Size" type="System.Drawing.Size, System.Drawing">
     <value>290, 141</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 15</value>
+  </data>
+  <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>294, 69</value>
+  </data>
+  <data name="lbl_playbackspeed.Location" type="System.Drawing.Point, System.Drawing">
+    <value>394, 66</value>
+  </data>
+  <data name="lbl_playbackspeed.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 75</value>
+  </data>
+  <data name="lbl_logpercent.Location" type="System.Drawing.Point, System.Drawing">
+    <value>394, 33</value>
+  </data>
+  <data name="LBL_logfn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>330, 33</value>
+  </data>
+  <data name="tracklog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>294, 27</value>
+  </data>
+  <data name="tableLayoutPaneltlogs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 141</value>
+  </data>
+  <data name="tabTLogs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 141</value>
+  </data>
+  <data name="tabControlactions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>298, 189</value>
+  </data>
+  <data name="SubMainLeft.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 462</value>
+  </data>
+  <data name="zg1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>694, 212</value>
+  </data>
+  <data name="goHereToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="flyToHereAltToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="flyToCoordsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="addPoiToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="pointCameraHereToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="PointCameraCoordsToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="triggerCameraToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="flightPlannerToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="setHomeHereToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="takeOffToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="onOffCameraOverlapToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="jumpToTagToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="gimbalVideoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 24</value>
+  </data>
+  <data name="contextMenuStripMap.Size" type="System.Drawing.Size, System.Drawing">
+    <value>233, 316</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>615, 3</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 15</value>
+  </data>
+  <data name="Zoomlevel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>611, 22</value>
+  </data>
+  <data name="distanceBar1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>538, 22</value>
+  </data>
+  <data name="TRK_zoom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>610, 40</value>
+  </data>
+  <data name="TRK_zoom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 160</value>
+  </data>
+  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>283, 396</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>106, 15</value>
+  </data>
+  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>225, 396</value>
+  </data>
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 15</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>142, 396</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>97, 15</value>
+  </data>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 396</value>
+  </data>
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 15</value>
+  </data>
+  <data name="lbl_hdop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>-1, 380</value>
+  </data>
+  <data name="lbl_sats.Location" type="System.Drawing.Point, System.Drawing">
+    <value>-1, 397</value>
+  </data>
+  <data name="gMapControl1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>694, 210</value>
+  </data>
+  <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>694, 426</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
+    <value>212</value>
+  </data>
+  <data name="CHK_autopan.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 19</value>
+  </data>
+  <data name="CB_tuning.Location" type="System.Drawing.Point, System.Drawing">
+    <value>260, 8</value>
+  </data>
+  <data name="CB_tuning.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 19</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 434</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>700, 25</value>
+  </data>
+  <data name="tableMap.Size" type="System.Drawing.Size, System.Drawing">
+    <value>702, 460</value>
   </data>
   <data name="tabActionsSimple.Size" type="System.Drawing.Size, System.Drawing">
     <value>290, 141</value>
@@ -1229,161 +1374,7 @@
   <data name="tabPayload.Size" type="System.Drawing.Size, System.Drawing">
     <value>290, 141</value>
   </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 15</value>
-  </data>
-  <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>294, 69</value>
-  </data>
-  <data name="lbl_playbackspeed.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 66</value>
-  </data>
-  <data name="lbl_playbackspeed.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 75</value>
-  </data>
-  <data name="lbl_logpercent.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 33</value>
-  </data>
-  <data name="LBL_logfn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>330, 33</value>
-  </data>
-  <data name="tracklog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>294, 27</value>
-  </data>
-  <data name="tableLayoutPaneltlogs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>290, 141</value>
-  </data>
-  <data name="tabTLogs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>290, 141</value>
-  </data>
   <data name="tablogbrowse.Size" type="System.Drawing.Size, System.Drawing">
     <value>290, 141</value>
-  </data>
-  <data name="tabControlactions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 189</value>
-  </data>
-  <data name="SubMainLeft.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 462</value>
-  </data>
-  <data name="zg1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>694, 212</value>
-  </data>
-  <data name="goHereToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="flyToHereAltToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="flyToCoordsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="addPoiToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="pointCameraHereToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="PointCameraCoordsToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="triggerCameraToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="flightPlannerToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="setHomeHereToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="takeOffToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="onOffCameraOverlapToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="jumpToTagToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="gimbalVideoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 24</value>
-  </data>
-  <data name="contextMenuStripMap.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 316</value>
-  </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>615, 3</value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 15</value>
-  </data>
-  <data name="Zoomlevel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>611, 22</value>
-  </data>
-  <data name="distanceBar1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>538, 22</value>
-  </data>
-  <data name="TRK_zoom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>610, 40</value>
-  </data>
-  <data name="TRK_zoom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 160</value>
-  </data>
-  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>283, 396</value>
-  </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>106, 15</value>
-  </data>
-  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>225, 396</value>
-  </data>
-  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 15</value>
-  </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>142, 396</value>
-  </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>97, 15</value>
-  </data>
-  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 396</value>
-  </data>
-  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 15</value>
-  </data>
-  <data name="lbl_hdop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>-1, 380</value>
-  </data>
-  <data name="lbl_sats.Location" type="System.Drawing.Point, System.Drawing">
-    <value>-1, 397</value>
-  </data>
-  <data name="gMapControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>694, 210</value>
-  </data>
-  <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>694, 426</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
-    <value>212</value>
-  </data>
-  <data name="CHK_autopan.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 19</value>
-  </data>
-  <data name="CB_tuning.Location" type="System.Drawing.Point, System.Drawing">
-    <value>260, 8</value>
-  </data>
-  <data name="CB_tuning.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 19</value>
-  </data>
-  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 434</value>
-  </data>
-  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>700, 25</value>
-  </data>
-  <data name="tableMap.Size" type="System.Drawing.Size, System.Drawing">
-    <value>702, 460</value>
   </data>
 </root>

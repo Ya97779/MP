@@ -56,6 +56,7 @@ namespace MissionPlanner
 
         public static menuicons displayicons; //do not initialize to allow update of custom icons
         public static string running_directory = Settings.GetRunningDirectory();
+        
 
         public abstract class menuicons
         {
@@ -83,6 +84,7 @@ namespace MissionPlanner
         /// 继承自menuicons基类，实现自定义图标加载逻辑。优先从运行目录加载light主题图标文件，
         /// 若本地文件不存在则使用内嵌资源作为备用方案
         /// </remarks>
+        /// //黑色主题页面就白色图片
         public class burntkermitmenuicons : menuicons
         {
             /// <summary>
@@ -237,7 +239,7 @@ namespace MissionPlanner
             }
         }
 
-        // 白色高对比度主题菜单图标集合
+        // 白色高对比度主题菜单图标集合：白色主题页面就黑色图标
         public class highcontrastmenuicons : menuicons
         {
             private string running_directory = Settings.GetRunningDirectory();
@@ -316,6 +318,146 @@ namespace MissionPlanner
                         return Image.FromFile($"{running_directory}dark_help_icon.png");
                     else
                         return global::MissionPlanner.Properties.Resources.dark_help_icon;
+                }
+            }
+
+            public override Image donate
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_donate_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_donate_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.donate;
+                }
+            }
+
+            public override Image connect
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_connect_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_connect_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.dark_connect_icon;
+                }
+            }
+
+            public override Image disconnect
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_disconnect_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_disconnect_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.dark_disconnect_icon;
+                }
+            }
+
+            public override Image bg
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_icon_background.png"))
+                        return Image.FromFile($"{running_directory}dark_icon_background.png");
+                    else
+                        return null;
+                }
+            }
+
+            public override Image wizard
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_wizard_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_wizard_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.wizardicon;
+                }
+            }
+        }
+        
+        // 新增：我的菜单图标集：Mymenuicons 
+        public class Mymenuicons : menuicons
+        {
+            private string running_directory = Settings.GetRunningDirectory();
+
+            public override Image fd
+            {
+                get
+                {
+                    //默认运行目录中没有，所以加载安装目录资源中的推按
+
+                    if (File.Exists($"{running_directory}myflightdata.png"))
+                        return Image.FromFile($"{running_directory}myflightdata.png");
+                    else 
+                        return global::MissionPlanner.Properties.Resources.myflightdata;
+                }
+            }
+
+            public override Image fp
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_flightplan_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_flightplan_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.dark_flightplan_icon;
+                }
+            }
+
+            public override Image initsetup
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_initialsetup_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_initialsetup_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.dark_initialsetup_icon;
+                }
+            }
+
+            public override Image config_tuning
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_tuningconfig_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_tuningconfig_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.dark_tuningconfig_icon;
+                }
+            }
+
+            public override Image sim
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_simulation_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_simulation_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.dark_simulation_icon;
+                }
+            }
+
+            public override Image terminal
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_terminal_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_terminal_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.dark_terminal_icon;
+                }
+            }
+
+            public override Image help
+            {
+                get
+                {
+                    if (File.Exists($"{running_directory}dark_help_icon.png"))
+                        return Image.FromFile($"{running_directory}dark_help_icon.png");
+                    else
+                        return global::MissionPlanner.Properties.Resources.myVTOL;
                 }
             }
 
@@ -730,21 +872,25 @@ namespace MissionPlanner
             }
 
             InitializeComponent();
-            // 界面主题管理
+            // 界面主题管理   重复设置主题 注释掉会提高性能
             //Init Theme table and load BurntKermit as a default 修改初始主题，
-            ThemeManager.thmColor = new ThemeColorTable(); //Init colortable
-            ThemeManager.thmColor.InitColors(); //This fills up the table with BurntKermit defaults.
-            ThemeManager.thmColor.SetTheme(); //Set the colors, this need to handle the case when not all colors are defined in the theme file
+            //ThemeManager.thmColor = new ThemeColorTable(); //Init colortable
+            //ThemeManager.thmColor.InitColors(); //This fills up the table with BurntKermit defaults.
+            //ThemeManager.thmColor.SetTheme(); //Set the colors, this need to handle the case when not all colors are defined in the theme file
 
 
             // 检查主题配置是否存在，若不存在则使用白色高对比度默认主题 
+            
+            //新增Mytheme.mpsystheme来修改界面的主题
             if (Settings.Instance["theme"] == null)
             {
-                
-                if (File.Exists($"{running_directory}custom.mpsystheme"))
-                    Settings.Instance["theme"] = "custom.mpsystheme";
+
+                //if (File.Exists($"{running_directory}custom.mpsystheme"))
+                //    Settings.Instance["theme"] = "custom.mpsystheme";
+                if (File.Exists($"{running_directory}Mytheme.mpsystheme"))
+                    Settings.Instance["theme"] = "Mytheme.mpsystheme";
                 else
-                    Settings.Instance["theme"] = "HighContrast.mpsystheme";
+                    Settings.Instance["theme"] = "BurntKermit.mpsystheme";//
             }
             ThemeManager.LoadTheme(Settings.Instance["theme"]);
             Utilities.ThemeManager.ApplyThemeTo(this);
@@ -879,7 +1025,7 @@ namespace MissionPlanner
             catch
             {
             }
-
+            //创建子窗口实例
             try
             {
                 log.Info("Create FD");
@@ -1182,11 +1328,12 @@ namespace MissionPlanner
             }
         }
 
-        // 切换菜单栏图标集并应用主题颜色
+        // 方法：用于切换菜单栏图标集并应用主题颜色，
         public void switchicons(menuicons icons)
         {
             //Check if we starting
-            if (displayicons != null)
+
+            if (displayicons != null)//目前有图标集
             {
                 // dont update if no change
                 if (displayicons.GetType() == icons.GetType())
@@ -1201,12 +1348,13 @@ namespace MissionPlanner
             MainMenu.BackgroundImage = displayicons.bg;
             
             // 更新所有菜单项的图标
-            MenuFlightData.Image = displayicons.fd;
+            //MenuFlightData.Image = displayicons.fd;
             MenuFlightPlanner.Image = displayicons.fp;
             MenuInitConfig.Image = displayicons.initsetup;
             MenuSimulation.Image = displayicons.sim;
             MenuConfigTune.Image = displayicons.config_tuning;
             MenuConnect.Image = displayicons.connect;
+            //MenuLogo.Image = displayicons.help;
             //MenuHelp.Image = displayicons.help;
 
             // 为所有菜单项统一应用主题文字颜色
@@ -5038,7 +5186,7 @@ namespace MissionPlanner
             }
         }
 
-        private void MenuArduPilot_Click(object sender, EventArgs e)
+        private void MenuLogo_Click(object sender, EventArgs e)
         {
 
         }

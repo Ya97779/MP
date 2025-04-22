@@ -410,11 +410,12 @@ namespace MissionPlanner.GCSViews
             MainV2.comPort.ParamListChanged += FlightData_ParentChanged;
 
             //HUD Theming, color setup
-            myhud.groundColor1 = ThemeManager.HudGroundTop;
-            myhud.groundColor2 = ThemeManager.HudGroundBot;
-            myhud.skyColor1 = ThemeManager.HudSkyTop;
-            myhud.skyColor2 = ThemeManager.HudSkyBot;
-            myhud.hudcolor = ThemeManager.HudText;
+            //更改HUD背景色 注释掉即可使用设计器进行更改
+            //myhud.groundColor1 = Color.PaleGoldenrod;
+            //myhud.groundColor2 = Color.GreenYellow;
+            //myhud.skyColor1 = Color.SkyBlue;
+            //myhud.skyColor2 = Color.LightCyan;
+            //myhud.hudcolor = Color.Black;
 
             hud1.displayicons = Settings.Instance.GetBoolean("HUD_showicons", false);
 
@@ -710,7 +711,7 @@ namespace MissionPlanner.GCSViews
             TabListDisplay.Add(tabScripts.Name, MainV2.DisplayConfiguration.displayScriptsTab);
 
             TabListDisplay.Add(tabTLogs.Name, MainV2.DisplayConfiguration.displayTelemetryTab);
-            
+
             //数据闪存日志
             TabListDisplay.Add(tablogbrowse.Name, MainV2.DisplayConfiguration.displayDataflashTab);
 
@@ -3058,20 +3059,20 @@ namespace MissionPlanner.GCSViews
                 CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
             }
         }
-
+        //需要注释掉，否则无法更改HUD天空和地面的背景颜色
         private void groundColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (groundColorToolStripMenuItem.Checked)
             {
                 // brown
-                hud1.groundColor1 = Color.FromArgb(147, 78, 1);
-                hud1.groundColor2 = Color.FromArgb(60, 33, 4);
+                //hud1.groundColor1 = Color.FromArgb(147, 78, 1);
+                //hud1.groundColor2 = Color.FromArgb(60, 33, 4);
             }
             else
             {
                 // green
-                hud1.groundColor1 = Color.FromArgb(0x9b, 0xb8, 0x24);
-                hud1.groundColor2 = Color.FromArgb(0x41, 0x4f, 0x07);
+                //hud1.groundColor1 = Color.FromArgb(0x9b, 0xb8, 0x24);
+                //hud1.groundColor2 = Color.FromArgb(0x41, 0x4f, 0x07);
             }
 
             Settings.config["groundColorToolStripMenuItem"] = groundColorToolStripMenuItem.Checked.ToString();
@@ -5977,10 +5978,7 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private void hud1_Load(object sender, EventArgs e)
-        {
 
-        }
 
         private void tabStatus_Paint(object sender, PaintEventArgs e)
         {

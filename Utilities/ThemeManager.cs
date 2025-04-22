@@ -46,6 +46,7 @@ namespace MissionPlanner.Utilities
 
         public enum IconSet
         {
+            MyIconSet,
             BurnKermitIconSet,
             HighContrastIconSet,
         }
@@ -64,35 +65,47 @@ namespace MissionPlanner.Utilities
             iconSet = IconSet.BurnKermitIconSet;
             terminalTheming = true;
             strThemeName = "BurntKermit.mpsystheme";
+            // 核心界面颜色配置
+            colors.Add("Background", Color.FromArgb(0x26, 0x27, 0x28), "BGColor");						// 此配置修改主菜单背景颜色// This changes the colour of the main menu background
+            colors.Add("Control Background", Color.FromArgb(0x43, 0x44, 0x45), "ControlBGColor");		// 此配置修改子菜单背景颜色// This changes the colour of the sub menu backgrounds
+            colors.Add("Text", Color.White, "TextColor");										        // 此配置修改全局文本颜色// This changes the colour of text
+            colors.Add("TextBox Background", Color.FromArgb(0x43, 0x44, 0x45), "BGColorTextBox");       // 此配置修改文本框背景颜色// This changes the colour of the background of textboxes
 
-            colors.Add("Background", Color.FromArgb(0x26, 0x27, 0x28), "BGColor");						// This changes the colour of the main menu background
-            colors.Add("Control Background", Color.FromArgb(0x43, 0x44, 0x45), "ControlBGColor");		// This changes the colour of the sub menu backgrounds
-            colors.Add("Text", Color.White, "TextColor");										// This changes the colour of text
-            colors.Add("TextBox Background", Color.FromArgb(0x43, 0x44, 0x45), "BGColorTextBox");		// This changes the colour of the background of textboxes
-            colors.Add("Button Text", Color.FromArgb(64, 87, 4), "ButtonTextColor");				// This changes the colour of button text
-            colors.Add("Button Background top", Color.FromArgb(148, 193, 31), "ButBG");								// This changes the colour of button backgrounds (Top)
-            colors.Add("Button Background bottom", Color.FromArgb(205, 226, 150), "ButBGBot");						// This changes the colour of button backgrounds (Bot)
-            colors.Add("ProgressBar Top", Color.FromArgb(102, 139, 26), "ProgressBarColorTop");	// These three variables change the colours of progress bars
-            colors.Add("ProgressBar Bottom", Color.FromArgb(124, 164, 40), "ProgressBarColorBot");
-            colors.Add("ProgressBar Outline", Color.FromArgb(150, 174, 112), "ProgressBarOutlineColor");
-            colors.Add("BannerColor1", Color.FromArgb(0x40, 0x57, 0x04), "BannerColor1");			// These two variables change the colours of banners such as "planner" umder configuration
-            colors.Add("BannerColor2", Color.FromArgb(0x94, 0xC1, 0x1F), "BannerColor2");
-            colors.Add("Disabled Button", Color.FromArgb(150, 43, 58, 3), "ColorNotEnabled");		// This changes the background color of buttons when not enabled
-            colors.Add("Button Mouseover", Color.FromArgb(73, 43, 58, 3), "ColorMouseOver");			// This changes the background color of buttons when the mouse is hovering over a button
-            colors.Add("Button Mousedown", Color.FromArgb(73, 43, 58, 3), "ColorMouseDown");			// This changes the background color of buttons when the mouse is clicked down on a button
-            colors.Add("CurrentPPM Background", Color.Green, "CurrentPPMBackground");					// This changes the background colour of the current PPM setting in the flight modes tab
-            colors.Add("Graph Chart Fill", Color.FromArgb(0x1F, 0x1F, 0x20), "ZedGraphChartFill"); 	// These three variables change the fill colours of Zed Graphs
-            colors.Add("Graph Pane Fill", Color.FromArgb(0x37, 0x37, 0x38), "ZedGraphPaneFill");
-            colors.Add("Graph Legend Fill", Color.FromArgb(0x85, 0x84, 0x83), "ZedGraphLegendFill");
-            colors.Add("Rich Text Box text", Color.WhiteSmoke, "RTBForeColor");							// This changes the colour of text in rich text boxes
-            colors.Add("BackStageView Button Area", Color.Black, "BSVButtonAreaBGColor");					// This changes the colour of a backstageview button area
-            colors.Add("BSV Unselected Text", Color.WhiteSmoke, "UnselectedTextColour");			// This changes the colour of unselected text in a BSV button
-            colors.Add("Horizontal ProgressBar", Color.FromArgb(148, 193, 31), "HorizontalPBValueColor"); // This changes the colour of the horizontal progressbar
-            colors.Add("HUD text and drawings", Color.LightGray, "HudText");                       
-            colors.Add("HUD Ground top", Color.FromArgb(0x9b, 0xb8, 0x24), "HudGroundTop");
-            colors.Add("HUD Ground bottom", Color.FromArgb(0x41, 0x4f, 0x07), "HudGroundBot");
-            colors.Add("HUD Sky top", Color.Blue, "HudSkyTop");
-            colors.Add("HUD Sky bottom", Color.LightBlue, "HudSkyBot");
+            // 按钮颜色配置组（包含常态/禁用/交互状态）
+            colors.Add("Button Text", Color.FromArgb(64, 87, 4), "ButtonTextColor");				// 按钮文本颜色// This changes the colour of button text
+            colors.Add("Button Background top", Color.FromArgb(148, 193, 31), "ButBG");				// 按钮顶部渐变背景色				// This changes the colour of button backgrounds (Top)
+            colors.Add("Button Background bottom", Color.FromArgb(205, 226, 150), "ButBGBot");		// 按钮底部渐变背景色				// This changes the colour of button backgrounds (Bot)
+            colors.Add("Button Mouseover", Color.FromArgb(73, 43, 58, 3), "ColorMouseOver");	    // 鼠标悬停时按钮背景色// This changes the background color of buttons when the mouse is hovering over a button
+            colors.Add("Button Mousedown", Color.FromArgb(73, 43, 58, 3), "ColorMouseDown");		// 鼠标按下时按钮背景色// This changes the background color of buttons when the mouse is clicked down on a button
+            colors.Add("Disabled Button", Color.FromArgb(150, 43, 58, 3), "ColorNotEnabled");       // 禁用状态按钮背景色// This changes the background color of buttons when not enabled
+
+            // 进度指示器颜色配置组
+            colors.Add("ProgressBar Top", Color.FromArgb(102, 139, 26), "ProgressBarColorTop");	            // 进度条顶部颜色// These three variables change the colours of progress bars
+            colors.Add("ProgressBar Bottom", Color.FromArgb(124, 164, 40), "ProgressBarColorBot");          // 进度条底部颜色
+            colors.Add("ProgressBar Outline", Color.FromArgb(150, 174, 112), "ProgressBarOutlineColor");    // 进度条边框颜色
+            colors.Add("Horizontal ProgressBar", Color.FromArgb(148, 193, 31), "HorizontalPBValueColor");   // 水平进度条填充色// This changes the colour of the horizontal progressbar
+
+            // 图表可视化组件配色组
+            colors.Add("Graph Chart Fill", Color.FromArgb(0x1F, 0x1F, 0x20), "ZedGraphChartFill"); 	    // ZedGraph图表填充色// These three variables change the fill colours of Zed Graphs
+            colors.Add("Graph Pane Fill", Color.FromArgb(0x37, 0x37, 0x38), "ZedGraphPaneFill");        // ZedGraph面板背景色
+            colors.Add("Graph Legend Fill", Color.FromArgb(0x85, 0x84, 0x83), "ZedGraphLegendFill");    // ZedGraph图例背景色
+            
+            //横幅与标识颜色​
+            colors.Add("BannerColor1", Color.FromArgb(0x40, 0x57, 0x04), "BannerColor1");			// 配置横幅(如"规划器"标题)主色// These two variables change the colours of banners such as "planner" umder configuration
+            colors.Add("BannerColor2", Color.FromArgb(0x94, 0xC1, 0x1F), "BannerColor2");           // 配置横幅渐变辅色
+
+            //特殊界面元素配色​
+            colors.Add("CurrentPPM Background", Color.Green, "CurrentPPMBackground");                   // This changes the background colour of the current PPM setting in the flight modes tab
+            colors.Add("Rich Text Box text", Color.WhiteSmoke, "RTBForeColor");							// 富文本框文本颜色// This changes the colour of text in rich text boxes
+            colors.Add("BackStageView Button Area", Color.Black, "BSVButtonAreaBGColor");				// BackStageView按钮区背景色	// This changes the colour of a backstageview button area
+            colors.Add("BSV Unselected Text", Color.WhiteSmoke, "UnselectedTextColour");			    // This changes the colour of unselected text in a BSV button
+            
+             // HUD显示元素配色组
+            colors.Add("HUD text and drawings", Color.LightGray, "HudText");         // HUD文本及图形颜色              
+            colors.Add("HUD Ground top", Color.PaleGoldenrod, "HudGroundTop");       // HUD 地面颜色上层
+            colors.Add("HUD Ground bottom", Color.GreenYellow, "HudGroundBot");      // HUD 地面颜色下层
+            colors.Add("HUD Sky top", Color.SkyBlue, "HudSkyTop");                   // HUD 天空颜色上层
+            colors.Add("HUD Sky bottom", Color.LightCyan, "HudSkyBot");              // HUD 天空颜色下层
 
         }
 
@@ -116,9 +129,12 @@ namespace MissionPlanner.Utilities
             }
 
             if (MainV2.instance != null)
-            {
+            {  //切换主题相关图标显示
                 switch (iconSet)
                 {
+                    case IconSet.MyIconSet:
+                        MainV2.instance.switchicons(new MainV2.Mymenuicons());
+                        break;
                     case IconSet.BurnKermitIconSet:
                         MainV2.instance.switchicons(new MainV2.burntkermitmenuicons());
                         break;
@@ -256,11 +272,11 @@ namespace MissionPlanner.Utilities
             //check theme extension to determine location (mpsystheme is in the program directory, mpusertheme is in the userdata directory)
             if (Path.GetExtension(strThemeName).Equals(".mpsystheme", StringComparison.OrdinalIgnoreCase))
             {
-                themeFileToLoad = Settings.GetRunningDirectory() + strThemeName;
+                themeFileToLoad = Settings.GetRunningDirectory() + strThemeName;//加载程序目录中的主题
             }
             else
             {
-                themeFileToLoad = Settings.GetUserDataDirectory() + strThemeName;
+                themeFileToLoad = Settings.GetUserDataDirectory() + strThemeName;//加载用户目录中的主题
             }
 
             try
@@ -270,6 +286,7 @@ namespace MissionPlanner.Utilities
                     ThemeManager.thmColor.strThemeName = strThemeName;
 
             }
+            //  *-------防止主题颜色为空---------*
             catch
             {
                 ThemeManager.thmColor = new ThemeColorTable(); //Init colortable
@@ -281,7 +298,7 @@ namespace MissionPlanner.Utilities
                 ThemeManager.thmColor = new ThemeColorTable(); //Init colortable
                 ThemeManager.thmColor.InitColors();
             }
-
+            //   *-----------------------------*
             //Copy color values to the ThemeManager color variables
             ThemeManager.thmColor.SetTheme();
             Settings.Instance["theme"] = ThemeManager.thmColor.strThemeName;

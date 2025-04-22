@@ -803,6 +803,16 @@ namespace MissionPlanner.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Gplanner2 {
+            get {
+                object obj = ResourceManager.GetObject("Gplanner2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap heli {
             get {
                 object obj = ResourceManager.GetObject("heli", resourceCulture);
@@ -1213,6 +1223,46 @@ namespace MissionPlanner.Properties {
             get {
                 object obj = ResourceManager.GetObject("mpdesktop", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap myconnect {
+            get {
+                object obj = ResourceManager.GetObject("myconnect", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap myflightdata {
+            get {
+                object obj = ResourceManager.GetObject("myflightdata", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap myflightdata1 {
+            get {
+                object obj = ResourceManager.GetObject("myflightdata1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap myVTOL {
+            get {
+                object obj = ResourceManager.GetObject("myVTOL", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -1712,6 +1762,36 @@ namespace MissionPlanner.Properties {
         internal static System.Drawing.Bitmap splashdark {
             get {
                 object obj = ResourceManager.GetObject("splashdark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap SplashGplanner {
+            get {
+                object obj = ResourceManager.GetObject("SplashGplanner", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap SplashGplanner1 {
+            get {
+                object obj = ResourceManager.GetObject("SplashGplanner1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap SplashGplanner2 {
+            get {
+                object obj = ResourceManager.GetObject("SplashGplanner2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
